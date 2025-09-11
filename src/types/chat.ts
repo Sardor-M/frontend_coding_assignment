@@ -1,6 +1,17 @@
 export type ChatMessage = {
   id: string;
+  role: "user" | "assistant";
   content: string;
-  sender: string;
-  timestamp: string;
+  timestamp: Date;
+  isStreaming?: boolean;
+};
+
+export type StreamingRequest = {
+  query: string;
+  projectId?: string;
+};
+
+export type Citation = {
+  docNum: number;
+  indices: number[];
 };
