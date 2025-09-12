@@ -8,7 +8,7 @@ type UseSSEOptions = {
   onError?: (error: Error) => void;
 };
 
-export default function useSSE() {
+export default function useServerEvent() {
   const setIsStreaming = useSetRecoilState(isStreamingAtom);
   const eventSourceRef = useRef<EventSource | null>(null);
 

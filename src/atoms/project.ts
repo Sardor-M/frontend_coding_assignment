@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 import type { Project } from "@/types/project";
-import type { ChatMessage } from "@/types/chat";
+import type { ChatMessageType } from "@/types/chat";
 
 export const projectsAtom = atom<Project[]>({
   key: "projectsAtom",
@@ -17,7 +17,7 @@ export const searchQueryAtom = atom<string>({
   default: "",
 });
 
-export const messagesAtom = atom<ChatMessage[]>({
+export const messagesAtom = atom<ChatMessageType[]>({
   key: "messagesAtom",
   default: [],
 });
