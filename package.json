@@ -1,40 +1,21 @@
 {
   "name": "frontend-assignment",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@microsoft/fetch-event-source": "^2.0.1",
-    "axios": "^1.6.2",
-    "clsx": "^2.1.0",
-    "lucide-react": "^0.294.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-markdown": "^9.0.1",
-    "react-router-dom": "^6.20.0",
-    "recoil": "^0.7.7",
-    "rehype-highlight": "^7.0.0",
-    "remark-gfm": "^4.0.0",
-    "tailwind-merge": "^2.1.0"
+    "dev": "npm run dev:server & npm run dev:web",
+    "dev:server": "npm run dev --workspace=server",
+    "dev:web": "npm run dev --workspace=web",
+    "build": "npm run build:web",
+    "build:web": "npm run build --workspace=web",
+    "start": "npm run start:server",
+    "start:server": "npm run start --workspace=server",
+    "install:all": "npm install --workspaces"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
-    "@types/react": "^18.3.24",
-    "@types/react-dom": "^18.2.15",
-    "@vitejs/plugin-react": "^4.2.0",
-    "autoprefixer": "^10.4.16",
-    "eslint": "^8.53.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.3.6",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.0"
+    "concurrently": "^7.6.0"
   }
 }

@@ -11,7 +11,7 @@ export function formatDate(date: string | Date): string {
 
 export function extractCitations(text: string): Citation[] {
   const regex = /\[(\d+)-(\d+)\]/g;
-  const citationMap = new Map<number, number[]>();
+  const citationMap = new Map<number, Set<number>>();
   let match;
 
   while ((match = regex.exec(text)) !== null) {
@@ -19,14 +19,14 @@ export function extractCitations(text: string): Citation[] {
     const index = parseInt(match[2]);
 
     if (!citationMap.has(docNum)) {
-      citationMap.set(docNum, []);
+      citationMap.set(docNum, new Set());
     }
-    citationMap.get(docNum)!.push(index);
+    citationMap.get(docNum)!.add(index);
   }
 
-  return Array.from(citationMap.entries()).map(([docNum, indices]) => ({
+  return Array.from(citationMap.entries()).map(([docNum, indicesSet]) => ({
     docNum,
-    indices,
+    indices: Array.from(indicesSet).sort((a, b) => a - b),
   }));
 }
 
@@ -37,4 +37,10 @@ export function parseMarkdownWithCitations(content: string): {
   const citations = extractCitations(content);
   const text = content.replace(/\[\d+-\d+\]/g, "");
   return { text, citations };
+}
+
+export function validateMarkdownStructure(markdown: string): boolean {
+  const headingRegex = /^(#{1,3}\s)/gm;
+  const bulletRegex = /^-\s/gm;
+  return headingRegex.test(markdown) && bulletRegex.test(markdown);
 }
