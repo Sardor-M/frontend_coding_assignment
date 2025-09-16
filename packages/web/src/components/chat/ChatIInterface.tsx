@@ -47,7 +47,10 @@ export default function ChatInterface() {
       onMessage: (data: string) => {
         try {
           const parsed = JSON.parse(data);
-          const text = parsed.message?.content || parsed || "";
+          const text =
+            (typeof parsed === "string" ? parsed : parsed?.text) ??
+            parsed?.message?.content ??
+            "";
           accumulatedContent += text;
           setMessages((prev) =>
             prev.map((msg) =>
