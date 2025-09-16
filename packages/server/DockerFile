@@ -1,0 +1,28 @@
+FROM node:20.18.0-alpine3.18 AS builder
+
+# Add security updates
+RUN apk update && apk upgrade && apk add --no-cache \
+    dumb-init \
+    && rm -rf /var/cache/apk/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY --chown=nodejs:nodejs package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy application code
+COPY --chown=nodejs:nodejs . .
+
+# Expose port
+EXPOSE 3001
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1); });"
+
+# Start the server
+CMD ["node", "src/index.js"]
