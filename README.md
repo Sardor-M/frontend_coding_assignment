@@ -1,6 +1,4 @@
-# Frontend Coding Assignment - Solution
-
-## Assignment Overview
+## Frontend Coding Assignment
 
 - **Understanding the requirements:** ~2 hours
 - **Implementation time:** ~10 hours
