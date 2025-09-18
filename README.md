@@ -1,69 +1,93 @@
-# React + TypeScript + Vite
+# Frontend Coding Assignment - Solution
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Assignment Overview
 
-Currently, two official plugins are available:
+- **Understanding the requirements:** ~2 hours
+- **Implementation time:** ~10 hours
+- **Total estimated time:** ~12 hours
+- **AI usage:** Allowed (e.g., ChatGPT)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Project Management
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Create, update, and delete projects
+- Responsive UI with Figma-accurate design
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### Chatbot (SSE)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Real-time chat with the server using Server-Sent Events (SSE)
+- Structured responses rendered as HTML
+- Markdown support and custom citation UI
+
+### RAG Query
+
+- Receives Markdown-formatted responses via SSE
+- Renders Markdown as HTML
+- Clickable citations ([#-#]) with the following behavior:
+    - Quotes are in the format `{docnum}-{index}`
+    - Only `{docnum}` is displayed; duplicates are collapsed
+    - Clicking a quote shows all `{docnum}-{index}` for that docnum in an alert
+    - Clicking the paragraph before a quote shows all related quotes in an alert
+
+### Technical Stack
+
+- React 18 + TypeScript + Vite
+- Tailwind CSS for styling
+- Custom BFF (Node.js/Express) for API proxying, SSE, and guardrails
+- ESLint, Prettier, and strict type-checking
+
+### API Communication
+
+- Supports both standard HTTP and SSE event streams
+- BFF handles all backend communication and safety checks
+
+### Safety & Guardrails
+
+- Local and external (LLM-based) guardrails for query safety
+- Rate limiting middleware
+
+---
+
+## Getting Started
+
+### 1. Install dependencies
+
+```sh
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Build the frontend
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+pnpm run build
 ```
+
+### 3. Start the BFF server
+
+```sh
+cd packages/server
+pnpm start
+```
+
+### 4. Serve the frontend (for local testing)
+
+```sh
+cd packages/web
+pnpm run preview
+```
+
+### 5. Deploy
+
+- The frontend build output is in `dist/` (see `firebase.json` for Firebase Hosting)
+- The BFF server can be deployed separately (Node.js environment)
+
+---
+
+## Notes
+
+- All requirements from the assignment are implemented, including custom BFF logic for safety, SSE, and project management.
+- The codebase is modular and ready for extension.
+- AI tools were used to assist with coding and debugging.

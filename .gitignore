@@ -32,8 +32,8 @@ yarn-error.log*
 packages/server/.env
 packages/server/.env.local
 packages/server/.env.*.local
-packages/server/.env.prod
-packages/frontend/.env
-packages/frontend/.env.local
-packages/frontend/.env.prod
-packages/frontend/.env.*.local
+packages/server/.env.production
+packages/web/.env
+packages/web/.env.local
+packages/web/.env.production
+packages/web/.env.*.local
