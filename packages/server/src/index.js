@@ -16,7 +16,6 @@ app.use(
     })
 );
 app.use(express.json());
-app.options('/answer', cors(corsOptions));
 
 const projectRoutes = require('./routes/projects');
 const answerRoutes = require('./routes/answer');
