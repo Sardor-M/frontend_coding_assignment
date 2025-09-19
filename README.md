@@ -1,11 +1,25 @@
-## Frontend Coding Assignment
+# Frontend Coding Assignment Solution
 
-- **Understanding the requirements:** ~2 hours
-- **Implementation time:** ~10 hours
-- **Total estimated time:** ~12 hours
-- **AI usage:** Allowed (e.g., ChatGPT)
+<div align="center">
+  
+  ![Demo Video](https://img.shields.io/badge/Demo-Video-blue?style=for-the-badge)
+  
+  > 🎥 **[Watch Demo Video](https://your-video-link-here.com)** | [Live Demo](https://frontend-assignment-70882.web.app)
+  
+</div>
 
----
+## Quick Demo
+
+## ![Demo GIF](https://your-gif-link-here.com/demo.gif)
+
+## Assignment Overview
+
+| **Aspect**         | **Details**               |
+| ------------------ | ------------------------- |
+| **Understanding**  | ~2 hours                  |
+| **Implementation** | ~10 hours                 |
+| **Total Time**     | ~12 hours                 |
+| **AI Usage**       | Allowed (ChatGPT, Claude) |
 
 ## Features
 
@@ -13,79 +27,205 @@
 
 - Create, update, and delete projects
 - Responsive UI with Figma-accurate design
+- Real-time state management with Recoil
 
 ### Chatbot (SSE)
 
-- Real-time chat with the server using Server-Sent Events (SSE)
-- Structured responses rendered as HTML
-- Markdown support and custom citation UI
+- Real-time streaming responses via Server-Sent Events
+- Markdown rendering with custom parsers
+- HTML content rendering
+- Error recovery and retry mechanisms
 
-### RAG Query
+### RAG Query System
 
-- Receives Markdown-formatted responses via SSE
-- Renders Markdown as HTML
-- Clickable citations ([#-#]) with the following behavior:
-    - Quotes are in the format `{docnum}-{index}`
-    - Only `{docnum}` is displayed; duplicates are collapsed
-    - Clicking a quote shows all `{docnum}-{index}` for that docnum in an alert
-    - Clicking the paragraph before a quote shows all related quotes in an alert
+- Markdown-formatted responses via SSE
+- Interactive citation system:
+    - Format: `[{docnum}-{index}]`
+    - Click quote → Shows all citations for that docnum
+    - Click paragraph → Shows all related quotes
+- Custom citation UI components
 
-### Technical Stack
+## Architecture
 
-- React 18 + TypeScript + Vite
-- Tailwind CSS for styling
-- Custom BFF (Node.js/Express) for API proxying, SSE, and guardrails
-- ESLint, Prettier, and strict type-checking
+```mermaid
+    flowchart TD
+        %% =======================
+        %% Frontend
+        %% =======================
+        subgraph Frontend ["Frontend - React (Firebase Hosting)"]
+            CI["Chat Interface 💬"]
+            PM["Projects Manager 📂"]
+            RQ["RAG Query Handler 🔍"]
+            RS[["Recoil State 🗄️"]]
 
-### API Communication
+            CI --> RS
+            PM --> RS
+            RQ --> RS
+        end
 
-- Supports both standard HTTP and SSE event streams
-- BFF handles all backend communication and safety checks
+        %% =======================
+        %% BFF
+        %% =======================
+        subgraph BFF ["BFF - Node.js (Render free tier)"]
+            RT["Routes 🌿"]
+            MW["Middleware 🎚️"]
+            RT --> MW
+        end
 
-### Safety & Guardrails
+        %% =======================
+        %% External Services
+        %% =======================
+        subgraph External ["External Services"]
+            OLL["Ollama (phi-4-mini) 🤖"]
+            RDR["Render.com 🖥️"]
+        end
 
-- Local and external (LLM-based) guardrails for query safety
-- Rate limiting middleware
+        %% =======================
+        %% Connections
+        %% =======================
+        RS -- "HTTP / SSE" --> RT
+        MW -- "ngrok tunnel" --> OLL
+        BFF --> RDR
+```
 
 ---
 
-## Getting Started
+## Tech Stack
 
-### 1. Install dependencies
-
-```sh
-pnpm install
-```
-
-### 2. Build the frontend
-
-```sh
-pnpm run build
-```
-
-### 3. Start the BFF server
-
-```sh
-cd packages/server
-pnpm start
-```
-
-### 4. Serve the frontend (for local testing)
-
-```sh
-cd packages/web
-pnpm run preview
-```
-
-### 5. Deploy
-
-- The frontend build output is in `dist/` (see `firebase.json` for Firebase Hosting)
-- The BFF server can be deployed separately (Node.js environment)
+| Layer              | Technologies                                         |
+| ------------------ | ---------------------------------------------------- |
+| **Frontend**       | React 18 • TypeScript • Vite • Tailwind CSS • Recoil |
+| **Backend**        | Node.js • Express • SSE • CORS                       |
+| **Infrastructure** | Firebase Hosting • Render.com • Ngrok                |
+| **AI/LLM**         | Ollama • Custom Guardrails                           |
+| **Dev Tools**      | ESLint • Prettier • npm Workspaces                   |
 
 ---
 
-## Notes
+## Project Structure
 
-- All requirements from the assignment are implemented, including custom BFF logic for safety, SSE, and project management.
-- The codebase is modular and ready for extension.
-- AI tools were used to assist with coding and debugging.
+```
+
+frontend-assignment/
+├── packages/
+│ ├── web/ # React frontend
+│ │ ├── src/
+│ │ │ ├── api/ # API layer & streaming
+│ │ │ ├── atoms/ # Recoil state
+│ │ │ ├── components/ # UI components
+│ │ │ ├── hooks/ # Custom hooks
+│ │ │ └── types/ # TypeScript types
+│ │ └── dist/ # Production build
+│ │
+│ └── server/ # BFF server
+│ ├── routes/ # API endpoints
+│ ├── middleware/ # Guards & rate limiting
+│ └── services/ # Business logic
+│
+├── firebase.json # Firebase config
+├── package.json # Workspace root
+└── README.md
+
+```
+
+---
+
+## Available Scripts
+
+| Command              | Description                                         |
+| -------------------- | --------------------------------------------------- |
+| `npm run dev`        | Start both frontend and backend in development mode |
+| `npm run dev:server` | Start backend server only                           |
+| `npm run dev:web`    | Start frontend dev server only                      |
+| `npm run build`      | Build frontend for production                       |
+| `npm run start`      | Start production backend server                     |
+
+---
+
+## ⚠️ Caution & Deployment Notes
+
+### Backend (BFF)
+
+- Hosted on **Render (free tier)**
+- ⚠️ May **sleep after inactivity** — the first request can take 20–50 seconds to respond depending on the request load time and model initialization
+
+### LLM Model:
+
+Choice: **Ollama (phi-4-mini model)**
+
+- Runs **locally** on the developer's machine
+- Exposed to the BFF server via **ngrok tunnel**
+- Chosen to **save hosting costs**;
+    - Model availability depends on the developer's machine being online
+
+### Frontend
+
+- Hosted on **Firebase Hosting** (free tier)
+
+> **Note:**
+> This architecture is for **demo purposes only**. For production, Ollama (or other LLMs) should be deployed on a cloud provider or as a managed/containerized service.
+
+---
+
+## Security and Guardrails
+
+- **Rate Limiting**: 20 requests per 2 minutes per IP
+- **Query Guardrails**: Local and LLM-based safety checks
+- **Input Sanitization**: Max 1000 character queries
+- **CORS Configuration**: Controlled origin access
+- **Error Boundaries**: Graceful error handling
+
+---
+
+## API Endpoints
+
+| Endpoint   | Method          | Description                      |
+| ---------- | --------------- | -------------------------------- |
+| `/health`  | GET             | Health check                     |
+| `/project` | GET/POST/DELETE | Project CRUD operations          |
+| `/answer`  | GET             | SSE streaming for chat responses |
+
+---
+
+## Implementation Highlights
+
+### SSE Implementation
+
+- Automatic reconnection on failure
+- Chunk accumulation for smooth streaming
+- Proper cleanup on component unmount
+
+### Citation System
+
+- Custom parser for `[#-#]` format
+- Interactive click handlers
+- Alert-based quote display
+
+### State Management
+
+- Centralized Recoil atoms
+- Optimistic UI updates
+- Persistent project storage
+
+---
+
+## Troubleshooting
+
+| Issue           | Solution                              |
+| --------------- | ------------------------------------- |
+| CORS errors     | Ensure backend allows frontend origin |
+| SSE not working | Check if Ollama is running locally    |
+| Render sleeping | First request takes 30-50s to wake    |
+| Build fails     | Clear node_modules and reinstall      |
+
+---
+
+## 📄 License
+
+Private assignment - All rights reserved
+
+---
+
+```
+
+```

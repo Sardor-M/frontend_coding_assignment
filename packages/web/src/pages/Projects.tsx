@@ -109,7 +109,7 @@ export default function ProjectsPage() {
 
     return (
         <Layout>
-            <header className="px-1 pt-12 pb-0">
+            <header className="px-6 pt-12 pb-0">
                 {' '}
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     {' '}
