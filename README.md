@@ -1,16 +1,12 @@
 # Frontend Coding Assignment Solution
 
+## Quick Demo: 
+
 <div align="center">
-  
-  ![Demo Video](https://img.shields.io/badge/Demo-Video-blue?style=for-the-badge)
-  
-  > 🎥 **[Watch Demo Video](https://your-video-link-here.com)** | [Live Demo](https://frontend-assignment-70882.web.app)
-  
+
+https://github.com/user-attachments/assets/688817d0-af30-4250-9843-6820574617df
+
 </div>
-
-## Quick Demo
-
-## ![Demo GIF](https://your-gif-link-here.com/demo.gif)
 
 ## Assignment Overview
 
