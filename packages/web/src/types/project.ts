@@ -11,6 +11,9 @@ export type CreateProjectRequest = {
 
 export type CreateProjectResponse = {
     id: string;
+    name: string;
+    created_at: string;
+    uuid: string;
 };
 
 export type UpdateProjectRequest = {
