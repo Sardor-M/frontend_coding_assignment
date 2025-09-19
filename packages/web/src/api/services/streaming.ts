@@ -16,6 +16,7 @@ export const streamingApi = {
                         Accept: 'text/event-stream',
                     },
                     credentials: 'omit',
+                    mode: 'cors',
                 }
             );
 

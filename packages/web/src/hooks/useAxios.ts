@@ -27,7 +27,7 @@ export default function useAxios() {
     const axiosInstance = useMemo(() => {
         const instance = axios.create({
             baseURL: apiUrl,
-            withCredentials: true,
+            withCredentials: false,
             headers: {
                 'Content-Type': 'application/json',
             },
