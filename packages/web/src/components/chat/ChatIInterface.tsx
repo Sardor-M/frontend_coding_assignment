@@ -4,21 +4,21 @@ import { ArrowRight } from 'lucide-react';
 import { isStreamingAtom, messagesAtom } from '@/atoms/project';
 import type { ChatMessageType } from '@/types/chat';
 import ChatMessage from '@/components/chat/ChatMessage';
-// import useServerEvent from '@/hooks/useServerEvent';
 import { streamingApi } from '@/api';
+
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
 export default function ChatInterface() {
     const [messages, setMessages] = useRecoilState(messagesAtom);
     const [isStreaming, setIsStreaming] = useRecoilState(isStreamingAtom);
     const [inputValue, setInputValue] = useState('');
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    // const { connect } = useServerEvent();
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
         if (!inputValue.trim() || isStreaming) return;
 
         const userMessage: ChatMessageType = {
@@ -39,8 +39,8 @@ export default function ChatInterface() {
         setMessages((prev) => [...prev, assistantMessage]);
 
         setInputValue('');
+        setIsStreaming(true);
 
-        // const streamUrl = streamingApi.getStreamUrl(inputValue);
         let accumulatedContent = '';
 
         streamingApi.startStreamWithFetch(
@@ -56,6 +56,7 @@ export default function ChatInterface() {
                 );
             },
             () => {
+                console.log('Stream completed');
                 setMessages((prev) =>
                     prev.map((msg) =>
                         msg.id === assistantMessage.id ? { ...msg, isStreaming: false } : msg
@@ -63,15 +64,14 @@ export default function ChatInterface() {
                 );
                 setIsStreaming(false);
             },
-            (error) => {
+            async (error) => {
                 console.error('Streaming error:', error);
                 setMessages((prev) =>
                     prev.map((msg) =>
                         msg.id === assistantMessage.id
                             ? {
                                   ...msg,
-                                  content:
-                                      'Error: Failed to get response. Make sure the backend server is running.',
+                                  content: 'Error occurred. Please try again.',
                                   isStreaming: false,
                               }
                             : msg
