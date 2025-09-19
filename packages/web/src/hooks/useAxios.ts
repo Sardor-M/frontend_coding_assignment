@@ -19,6 +19,7 @@ type AxiosOptions<T> = {
 };
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+
 export default function useAxios() {
     const navigate = useNavigate();
     const setError = useSetRecoilState(errorAtom);
@@ -38,6 +39,7 @@ export default function useAxios() {
             (error) => {
                 if (
                     error.response?.status === 401 &&
+                    !error.code?.includes('ERR_NETWORK') &&
                     !error.config?.url?.includes('verify-login-otp') &&
                     !error.config?.url?.includes('login')
                 ) {
@@ -59,7 +61,7 @@ export default function useAxios() {
             customHeaders = {},
             onSuccess,
             onError,
-            withCredentials = true,
+            withCredentials = false,
             skipGlobalErrorHandler = false,
         }: AxiosOptions<T>): Promise<ApiResponse<T>> => {
             if (abortControllerRef.current) {
@@ -99,6 +101,22 @@ export default function useAxios() {
                 if (axios.isCancel(error)) {
                     console.info('Request canceled:', error.message);
                     throw error;
+                }
+
+                if (axios.isAxiosError(error) && error.code === 'ERR_NETWORK') {
+                    console.info('CORS or Network error detected:', error);
+                    const corsError = new Error('CORS error: Please check server configuration');
+
+                    if (onError) {
+                        onError(corsError);
+                    } else if (!skipGlobalErrorHandler) {
+                        setError({
+                            title: 'Network Error',
+                            message: 'Cannot connect to server. This might be a CORS issue.',
+                            record: null,
+                        });
+                    }
+                    throw corsError;
                 }
 
                 const errorMessage =

@@ -5,10 +5,11 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+/* cors enabled for all origins */
 app.use(
     cors({
-        origin: '*', // Allow all origins
-        credentials: false, // Don't send credentials
+        origin: '*',
+        credentials: false,
         methods: ['GET', 'POST', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Accept'],
     })
@@ -16,6 +17,7 @@ app.use(
 
 app.use(express.json());
 
+/* here we handle the preflight requests */
 app.options('*', (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
