@@ -222,10 +222,4 @@ Choice: **Ollama (phi-4-mini model)**
 
 ## 📄 License
 
-Private assignment - All rights reserved
-
----
-
-```
-
-```
+Refer to the LICENSE file for details.
